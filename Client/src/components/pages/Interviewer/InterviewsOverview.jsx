@@ -3,10 +3,11 @@ import { Calendar, Users, Clock, ChevronRight, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { axiosPrivate } from '../../../api/axios';
 import useAuth from '../../../hooks/useAuth';
-
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 const InterviewsOverview = () => {
   const [activeTab, setActiveTab] = useState('active');
   const [searchTerm, setSearchTerm] = useState('');
+  const {axiosPrivate}=useAxiosPrivate();
   const [interviews, setInterviews] = useState({
     active: [],
     past: []
@@ -24,7 +25,7 @@ const InterviewsOverview = () => {
         
         // Fetch active interviews
         const activeResponse = await axiosPrivate.post(
-          'http://localhost:8080/interview/Active',
+          '/interview/Active',
           JSON.stringify(auth),
           {
             headers: { 'Content-Type': 'application/json' },
@@ -34,7 +35,7 @@ const InterviewsOverview = () => {
         console.log(activeResponse);
         // Fetch past interviews
         const pastResponse = await axiosPrivate.post(
-          'http://localhost:8080/interview/Past',
+          '/interview/Past',
           JSON.stringify(auth),
           {
             headers: { 'Content-Type': 'application/json' },

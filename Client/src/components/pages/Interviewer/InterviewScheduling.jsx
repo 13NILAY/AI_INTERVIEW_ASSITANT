@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Calendar, Clock, Book, MessageSquare, Plus, Trash2 ,Video} from 'lucide-react';
 import { Bot } from 'lucide-react';
 import useAuth from '../../../hooks/useAuth';
-import { axiosPrivate } from '../../../api/axios';
+
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 const InterviewScheduling = () => {
   const auth=useAuth();
+  const {axiosPrivate}=useAxiosPrivate();
   const [formData, setFormData] = useState({
     title: '',
     domain: '',
@@ -32,7 +34,7 @@ const InterviewScheduling = () => {
     e.preventDefault();
     try {
 
-      const response = await axiosPrivate.post(`http://localhost:8080/interview/scheduled`,
+      const response = await axiosPrivate.post(`/interview/scheduled`,
         JSON.stringify({formData,auth}),
         {
           headers: {

@@ -9,10 +9,11 @@ import {
   PlayCircle,
   AlertCircle
 } from 'lucide-react';
-import { axiosPrivate } from '../../../api/axios';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 
 const InterviewInfo = () => {
   const { interviewId } = useParams();
+  const {axiosPrivate}=useAxiosPrivate();
   const navigate = useNavigate();
   const [interview, setInterview] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -21,7 +22,7 @@ const InterviewInfo = () => {
   React.useEffect(() => {
     const fetchInterviewDetails = async () => {
       try {
-        const response = await axiosPrivate.get(`http://localhost:8080/interview/${interviewId}`);
+        const response = await axiosPrivate.get(`/interview/${interviewId}`);
         console.log(response);
         setInterview(response.data);
         setLoading(false);

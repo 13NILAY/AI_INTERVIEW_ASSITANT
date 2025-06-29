@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { axiosPrivate } from '../../../api/axios';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import { Download, FileText, User, ChevronDown, ChevronUp } from 'lucide-react';
 import { useParams, useLocation } from 'react-router-dom';
 
 const InterviewDetails = () => {
   const { interviewId } = useParams();
   const location = useLocation();
+  const {axiosPrivate}=useAxiosPrivate();
   const [interviewData, setInterviewData] = useState({
     title: '',
     domain: '',
@@ -27,7 +28,7 @@ const InterviewDetails = () => {
   useEffect(() => {
     const fetchInterviewDetails = async () => {
       try {
-        const response = await axiosPrivate.get(`http://localhost:8080/interview/details/${interviewId}`, {
+        const response = await axiosPrivate.get(`/interview/details/${interviewId}`, {
             headers: {
             'Content-Type': 'application/json',
           },

@@ -1,12 +1,13 @@
 import React, { useState,useEffect } from 'react';
 import { Calendar, Clock, Users, FileText, CheckSquare, PieChart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { axiosPrivate } from '../../../api/axios';
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate';
 import useAuth from '../../../hooks/useAuth';
 const InterviewerDashboard = () => {
   // const axiosPrivate=useAxiosPrivate();
   const navigate = useNavigate();
   const auth=useAuth();
+  const {axiosPrivate}=useAxiosPrivate();
   const [upcomingInterviews, setUpcomingInterviews] = useState([]);
   const [stats, setStats] = useState({
     totalCandidates: 0,
@@ -21,7 +22,7 @@ const InterviewerDashboard = () => {
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
-        const interviewsResponse = await axiosPrivate.post(`http://localhost:8080/interview/Active`,
+        const interviewsResponse = await axiosPrivate.post(`/interview/Active`,
           JSON.stringify(auth),
           {
                 headers: {
@@ -31,7 +32,7 @@ const InterviewerDashboard = () => {
             },
               
             );
-            const statsResponse = await axiosPrivate.get(`http://localhost:8080/interview/stats`,
+            const statsResponse = await axiosPrivate.get(`/interview/stats`,
               {
                 headers: {
                 'Content-Type': 'application/json',

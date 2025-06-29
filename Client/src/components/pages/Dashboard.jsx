@@ -11,12 +11,15 @@ import {
   Sparkles,
   PlusCircle
 } from 'lucide-react';
-import { axiosPrivate } from '../../api/axios';
+// import { axiosPrivate } from '../../api/axios';
 import useAuth from '../../hooks/useAuth';
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { auth } = useAuth();
+  const {axiosPrivate}=useAxiosPrivate()
   const [interviews, setInterviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -26,7 +29,7 @@ const Dashboard = () => {
     setIsVisible(true);
     const fetchInterviews = async () => {
       try {
-        const response = await axiosPrivate.get('http://localhost:8080/interview/scheduled');
+        const response = await axiosPrivate.get('/interview/scheduled');
         const processedInterviews = response.data.map(interview => ({
           id: interview._id,
           title: interview.title,
