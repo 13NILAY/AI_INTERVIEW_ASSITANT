@@ -8,4 +8,6 @@ export const generatePDF = (transcript) => {
     doc.text(`Question ${index + 1}: ${item}`, 10, 10 + (index * 10));
   });
   doc.save('transcript.pdf');
+  
+  
 };

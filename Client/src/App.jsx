@@ -40,7 +40,7 @@ const App = () => {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/settings" element={<Settings />} />
+          {/* <Route path="/settings" element={<Settings />} /> */}
           <Route element={<PersistLogin/>}>
           {/* <Route element={<RequireAuth allowedRoles={["Interviewer","Interviewee"]}/>}> */}
           <Route path="/complete-profile" element={<ProfileCompletion />} />
@@ -56,10 +56,10 @@ const App = () => {
           />
         
           <Route path="/progress" element={<Progress />} />
-          <Route path="/dashboard1" element={<Dashboard />} />
+          {/* <Route path="/dashboard1" element={<Dashboard />} /> */}
           <Route path="/dashboard" element={<InterviewerDashboard />} />
-          <Route path="/ScheduleInterview" element={<InterviewScheduling />} />
-          <Route path="/InterviewOverview" element={<InterviewsOverview />} />
+          {/* <Route path="/ScheduleInterview" element={<InterviewScheduling />} /> */}
+          {/* <Route path="/InterviewOverview" element={<InterviewsOverview />} /> */}
           {/* <Route  path="/interview/details/:interviewId" element={<InterviewDetails />} /> */}
           <Route
             path="/interview/details/:interviewId"

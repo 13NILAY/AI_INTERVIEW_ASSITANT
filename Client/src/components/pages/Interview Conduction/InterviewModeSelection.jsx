@@ -175,7 +175,7 @@ const InterviewModeSelection = () => {
                 </span>
                 
                 <button 
-                  onClick={() => navigate('/interview')}
+                  onClick={() => navigate('/interview', { state: { role: role } })}
                   className="flex items-center text-indigo-200 group-hover:text-white
                            px-4 py-2 rounded-full bg-indigo-900/50 group-hover:bg-indigo-700/50
                            transition-all duration-300"

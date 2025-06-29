@@ -22,7 +22,7 @@ const LandingPage = () => {
 
   const handleGetStarted = () => {
     const isLoggedIn = true; // Replace with actual auth check
-    navigate(isLoggedIn ? '/dashboard1' : '/login');
+    navigate(isLoggedIn ? '/complete-profile' : '/login');
   };
 
   const features = [

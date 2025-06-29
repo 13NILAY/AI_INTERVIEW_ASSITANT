@@ -4,9 +4,12 @@ import AddNewInterview from './AddNewInterview';
 import InterviewList from './InterviewList';
 import { useParams } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 const InterviewDashboard = () => {
-  const { role } = useParams();
+  const location=useLocation();
+  const role=location.state?.role;
+  
   
   return (
     <motion.div 

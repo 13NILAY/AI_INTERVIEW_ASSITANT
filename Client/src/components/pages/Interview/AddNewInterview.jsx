@@ -75,7 +75,7 @@ const AddNewInterview = ({ role }) => {
                     </div>
                     <div className="flex-grow">
                         <h3 className="text-2xl font-semibold text-indigo-100 mb-2">
-                            Create New AI Interview
+                            Create New AI Interview {role?`for ${role} role`:``}
                         </h3>
                         <p className="text-indigo-200/80">
                             Set up a personalized interview session tailored to your target position
@@ -112,7 +112,7 @@ const AddNewInterview = ({ role }) => {
                         <div className="bg-gradient-to-r from-indigo-800 to-indigo-900 p-6">
                             <h3 className="text-2xl font-bold text-white flex items-center">
                                 <Sparkles className="mr-3 text-indigo-300" />
-                                Interview Setup Wizard
+                                {role?`${role} role`:`Interview Setup Wizard`}
                             </h3>
                         </div>
                         

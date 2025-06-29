@@ -57,7 +57,7 @@ const Navbar = () => {
       return [
         { path: '/', label: 'Home', icon: <Home size={18} /> },
         { path: '/complete-profile', label: 'Profile', icon: <User size={18} /> },
-        { path: '/dashboard1', label: 'Practice', icon: <BookOpen size={18} /> },
+        // { path: '/dashboard1', label: 'Practice', icon: <BookOpen size={18} /> },
         { path: '/interview', label: 'Progress', icon: <TrendingUp size={18} /> },
       ];
     }
@@ -120,12 +120,12 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {auth.isAuthenticated ? (
               <>
-                <button
+                {/* <button
                   onClick={() => handleNavigation('/settings')}
                   className="p-2 text-indigo-200 hover:bg-slate-800/80 hover:text-white rounded-full transition-colors"
                 >
                   <Settings size={18} />
-                </button>
+                </button> */}
                 <div className="h-6 w-px bg-slate-700"></div>
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-500 to-blue-500 
