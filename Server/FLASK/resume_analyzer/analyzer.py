@@ -1,3 +1,24 @@
+# ===== NUMPY COMPATIBILITY WORKAROUND =====
+import sys
+import numpy as np
+
+# Comprehensive workaround for numpy 1.23 pickle loading
+if not hasattr(np, '_core'):
+    # Create necessary aliases
+    sys.modules['numpy._core'] = np.core
+    sys.modules['numpy._core.multiarray'] = np.core.multiarray
+    sys.modules['numpy.core'] = np.core
+    sys.modules['numpy.core._multiarray_umath'] = np.core._multiarray_umath
+    sys.modules['numpy._core.umath'] = np.core.umath
+    sys.modules['numpy._core._multiarray_umath'] = np.core._multiarray_umath
+    sys.modules['numpy._core.numeric'] = np.core.numeric
+    sys.modules['numpy._core.fromnumeric'] = np.core.fromnumeric
+    sys.modules['numpy._core.overrides'] = np.core.overrides
+    sys.modules['numpy._core.shape_base'] = np.core.shape_base
+    sys.modules['numpy._core.records'] = np.core.records
+    sys.modules['numpy._core.function_base'] = np.core.function_base
+# ===== END WORKAROUND =====
+
 import pdfplumber
 import re
 import pickle

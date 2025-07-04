@@ -1,3 +1,15 @@
+# ===== NUMPY COMPATIBILITY WORKAROUND =====
+import sys
+import numpy as np
+
+if not hasattr(np, '_core'):
+    sys.modules['numpy._core'] = np.core
+    sys.modules['numpy._core.multiarray'] = np.core.multiarray
+    sys.modules['numpy.core'] = np.core
+    sys.modules['numpy.core._multiarray_umath'] = np.core._multiarray_umath
+# ===== END WORKAROUND =====
+
+
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model
