@@ -11,6 +11,10 @@ if not hasattr(np, '_core'):
     sys.modules['numpy.core._multiarray_umath'] = np.core._multiarray_umath
 # ===== END WORKAROUND =====
 
+# Now import TensorFlow and configure it
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU
+
 # Now your regular imports
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -24,6 +28,14 @@ CORS(app)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/tf-info')
+def tf_info():
+    return jsonify({
+        "version": tf.__version__,
+        "devices": [d.device_type for d in tf.config.list_physical_devices()],
+        "using_gpu": tf.test.is_gpu_available()
+    })
 
 @app.route('/analyze', methods=['POST'])
 def analyze():

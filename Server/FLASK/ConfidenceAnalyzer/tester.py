@@ -1,3 +1,7 @@
+# Now import TensorFlow and configure it
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU
+
 import numpy as np
 from PIL import Image
 from tensorflow.keras.models import load_model

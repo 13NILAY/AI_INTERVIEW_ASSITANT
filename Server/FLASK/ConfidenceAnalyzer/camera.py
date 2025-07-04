@@ -9,6 +9,9 @@ if not hasattr(np, '_core'):
     sys.modules['numpy.core._multiarray_umath'] = np.core._multiarray_umath
 # ===== END WORKAROUND =====
 
+# Now import TensorFlow and configure it
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU
 
 import cv2
 import numpy as np

@@ -19,6 +19,10 @@ if not hasattr(np, '_core'):
     sys.modules['numpy._core.function_base'] = np.core.function_base
 # ===== END WORKAROUND =====
 
+# Now import TensorFlow and configure it
+import tensorflow as tf
+tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU
+
 import pdfplumber
 import re
 import pickle
