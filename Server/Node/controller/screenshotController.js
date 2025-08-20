@@ -19,7 +19,7 @@ const handleScreenshotUpload = async (req, res) => {
             form.append('image', fs.createReadStream(filepath));
 
             try {
-                const response = await axios.post('https://ai-interview-assitant-1.onrender.com/predict', form, {
+                const response = await axios.post('https://nilay1303-ai-interview-assistant.hf.space/predict', form, {
                     headers: form.getHeaders(),
                 });
 

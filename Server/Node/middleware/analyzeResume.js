@@ -7,7 +7,7 @@ async function analyzeResume(filePath) {
     const form = new FormData();
     form.append("file", fs.createReadStream(filePath));
 
-    const response = await axios.post("https://ai-interview-assitant-1.onrender.com/analyze", form, {
+    const response = await axios.post("https://nilay1303-ai-interview-assistant.hf.space/analyze", form, {
       headers: form.getHeaders(),
     });
     console.log(response);

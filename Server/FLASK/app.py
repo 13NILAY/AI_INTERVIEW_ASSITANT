@@ -1,51 +1,42 @@
-# ===== NUMPY COMPATIBILITY WORKAROUND =====
 import os
 import sys
+from datetime import datetime
+from pathlib import Path
 import numpy as np
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow logs
-
-if not hasattr(np, '_core'):
-    sys.modules['numpy._core'] = np.core
-    sys.modules['numpy._core.multiarray'] = np.core.multiarray
-    sys.modules['numpy.core'] = np.core
-    sys.modules['numpy.core._multiarray_umath'] = np.core._multiarray_umath
-# ===== END WORKAROUND =====
-
-# TensorFlow setup
 import tensorflow as tf
-tf.config.set_visible_devices([], 'GPU')  # Explicitly disable GPU
 
-# Flask + others
-from flask import Flask, request, jsonify
+# Disable GPU
+tf.config.set_visible_devices([], 'GPU')
+
+# Flask imports
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from PIL import Image
-from tensorflow.keras.models import load_model
-
-# Your custom resume analyzers
-from resume_analyzer.analyzer import analyze_resume
-from AnalyzeResume.resume_analyzer import analyze_resume1
 
 app = Flask(__name__)
 CORS(app)
 
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# Setup upload directory
+UPLOAD_FOLDER = Path('/tmp/uploads')
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = str(UPLOAD_FOLDER)
 
-# -------- ROUTES -------- #
+# ===== ROUTES ===== #
 
-@app.route('/tf-info')
-def tf_info():
-    return jsonify({
-        "version": tf.__version__,
-        "devices": [d.device_type for d in tf.config.list_physical_devices()],
-        "using_gpu": bool(tf.config.list_physical_devices('GPU'))
-    })
+@app.route('/')
+def home():
+    return "Resume Analyzer and Emotion Detection API is running! Use /analyze, /analyze-resume, or /predict endpoints."
 
+@app.route('/health')
+def health():
+    return jsonify({"status": "healthy", "timestamp": datetime.utcnow().isoformat()})
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
+    try:
+        from resume_analyzer.analyzer import analyze_resume
+    except ImportError as e:
+        return jsonify({'error': f'Dependency error: {str(e)}'}), 500  
     if 'file' not in request.files:
         return jsonify({'error': 'No file uploaded'}), 400
 
@@ -56,10 +47,13 @@ def analyze():
     result = analyze_resume(filepath)
     return jsonify(result)
 
-
 @app.route('/analyze-resume', methods=['POST'])
 def analyze_resume_route():
-    if 'file' not in request.files:   # 🔹 fixed mismatch (was "resume" before)
+    try:
+        from AnalyzeResume.resume_analyzer import analyze_resume1
+    except ImportError as e:
+        return jsonify({'error': f'Dependency error: {str(e)}'}), 500
+    if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
 
     file = request.files['file']
@@ -71,18 +65,38 @@ def analyze_resume_route():
 
 
 # -------- MODEL PREDICTION -------- #
-# Lazy load model so TF doesn’t blow memory at startup
-model = None
 emotion_labels = ['anger', 'neutral', 'fear', 'sad', 'disgust', 'happy', 'surprise']
+
+# Use a function closure instead of global variables
+def get_model():
+    model = None
+    def load():
+        nonlocal model
+        if model is None:
+            # Configure TensorFlow memory growth FIRST
+            import tensorflow as tf
+            tf.config.set_visible_devices([], 'GPU')
+            physical_devices = tf.config.list_physical_devices('CPU')
+            for device in physical_devices:
+                tf.config.experimental.set_memory_growth(device, True)
+            
+            # Now load the model
+            from tensorflow.keras.models import load_model
+            model = load_model("models/best_model.h5")
+        return model
+    return load
+
+model_loader = get_model()
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    global model
-    if model is None:
-        model = load_model("models/best_model.h5")
-
     if 'image' not in request.files:
         return jsonify({'error': 'No image uploaded'}), 400
+
+    try:
+        model = model_loader()
+    except Exception as e:
+        return jsonify({'error': f'Model loading failed: {str(e)}'}), 500
 
     image = Image.open(request.files['image']).convert('L')
     image = image.resize((48, 48))
@@ -97,7 +111,10 @@ def predict():
     return jsonify({'emotion': emotion})
 
 
-# -------- MAIN ENTRY -------- #
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # 🔹 dynamic port for Render
-    app.run(host="0.0.0.0", port=port, debug=False)
+    import os
+    port = int(os.environ.get("PORT", 7860))  # use HF's port when provided
+    # create uploads dir
+    os.makedirs('uploads', exist_ok=True)
+    from waitress import serve  # optional local runner; Docker will use gunicorn
+    serve(app, host='0.0.0.0', port=port)
