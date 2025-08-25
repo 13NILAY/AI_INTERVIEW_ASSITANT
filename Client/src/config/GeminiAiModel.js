@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 
-const apiKey = "AIzaSyCgi8SoVuX1BuZwRfZEVBl6P_DyCd1gAuk";  // Vite environment variable
+const apiKey = "AIzaSyATLWsadUZGhLjTb3mLJgttLDE9x6Iy8Wo";  // Vite environment variable
 const genAI = new GoogleGenerativeAI(apiKey);
 
 const model = genAI.getGenerativeModel({
